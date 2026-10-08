@@ -1368,6 +1368,40 @@ const MONTHLY_REPORTS = [
 // ═══════════════════════════════════════════════════════════════
 // ③ CALCULATION ENGINE — All stats derived here. Never hardcode.
 // ═══════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DISPLAY LABEL MAPS — proprietary labels → public display names
+// Internal data keys remain unchanged for calculations; only UI display changes
+// ═══════════════════════════════════════════════════════════════════════════════
+const ENTRY_DISPLAY = {
+  'BE/U.WICK': 'Entry Type A',
+  'BE/IMB':    'Entry Type B',
+  'BE/T.BAR':  'Entry Type C',
+  'M15 BE':    'Entry Type D',
+  'M3 SIM':    'Entry Type E',
+  'SIM/IMB':   'Entry Type F',
+  'H4 BE':     'Entry Type G',
+};
+function entryLabel(e) { return ENTRY_DISPLAY[e] || e || 'Unknown'; }
+
+const BIAS_DISPLAY = {
+  'H4 A+':          'Model A',
+  'H4 A+, R.ENTRY': 'Model A — Re-entry',
+  'H4A+ R.ENTRY':   'Model A — Re-entry (variant)',
+  'ARC':            'ARC Model',
+  'ARC R.ENTRY':    'ARC — Re-entry',
+  'R.ENTRY':        'Re-entry',
+  'PB-MTG':         'Pullback Model',
+};
+function biasLabel(b) { return BIAS_DISPLAY[b] || b || 'Unknown'; }
+
+const GRADE_DISPLAY = {
+  'A+/CLEAN':    'Qualified — Clean',
+  'A+/EX-ERROR': 'Qualified — Execution Error',
+  'NO SETUP/X':  'Unqualified',
+};
+function gradeLabel(g) { return GRADE_DISPLAY[g] || g || 'Unknown'; }
+
 function calcStats(trades) {
   const ex = trades.filter(t => t.outcome !== "MISSED");
   if (!ex.length) return null;
@@ -1505,7 +1539,7 @@ function showChartTooltip(trade,cumR,idx){
     `<span style="color:var(--grey)">Grade: </span><span>${gradeLabel(trade.grade)||'—'}</span><br>` +
     `<span style="color:var(--grey)">Trade R: </span><span style="color:${trade.r>=0?'var(--green)':'var(--red)'}">${sign}${trade.r.toFixed(2)}R</span> &nbsp; ` +
     `<span style="color:var(--grey)">Cumulative: </span><span style="color:${cumR>=0?'var(--green)':'var(--red)'}">${csign}${cumR.toFixed(2)}R</span><br>` +
-    `<span style="color:var(--grey)">Entry: </span><span>${trade.entryType||'—'} &nbsp;</span>` +
+    `<span style="color:var(--grey)">Entry: </span><span>${entryLabel(trade.entryType)||'—'} &nbsp;</span>` +
     `<span style="color:var(--grey)">Outcome: </span><span style="color:${trade.outcome==='WON'?'var(--green)':trade.outcome==='LOSS'?'var(--red)':'var(--yellow)'}">${trade.outcome}</span>`;
 }
 
@@ -1627,10 +1661,10 @@ function renderEdge(){
   // Entry bar
   const etyped=TRADES.filter(t=>t.entryType);
   const emap=groupBy(etyped,'entryType');
-  const entries=Object.entries(emap).map(([e,tr])=>({e,r:r2(calcStats(tr).totalR)})).sort((a,b)=>b.r-a.r);
+  const entries=Object.entries(emap).map(([e,tr])=>({e,label:entryLabel(e),r:r2(calcStats(tr).totalR)})).sort((a,b)=>b.r-a.r);
   const eb=document.getElementById('entryBar');
   if(window.entryChart)window.entryChart.destroy();
-  window.entryChart=new Chart(eb,{type:'bar',data:{labels:entries.map(e=>e.e),datasets:[{data:entries.map(e=>e.r),backgroundColor:entries.map(e=>e.r>=0?'rgba(240,240,240,.2)':'rgba(248,113,113,.5)'),borderRadius:0}]},options:{...CD,responsive:true,indexAxis:'y',scales:{x:{...GR,ticks:{...GR.ticks,callback:v=>`${v}R`}},y:{...GR,grid:{display:false},ticks:{...GR.ticks,font:{family:"'Space Mono',monospace",size:9}}}}}});
+  window.entryChart=new Chart(eb,{type:'bar',data:{labels:entries.map(e=>e.label),datasets:[{data:entries.map(e=>e.r),backgroundColor:entries.map(e=>e.r>=0?'rgba(240,240,240,.2)':'rgba(248,113,113,.5)'),borderRadius:0}]},options:{...CD,responsive:true,indexAxis:'y',scales:{x:{...GR,ticks:{...GR.ticks,callback:v=>`${v}R`}},y:{...GR,grid:{display:false},ticks:{...GR.ticks,font:{family:"'Space Mono',monospace",size:9}}}}}});
 }
 
 function renderExecution(){
@@ -2015,39 +2049,3 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
-// ═══════════════════════════════════════════════════════════════════════════════
-// ENTRY TYPE DISPLAY MAP — Map proprietary labels to public display names
-// The underlying entryType values remain for calculations but are not shown publicly
-// ═══════════════════════════════════════════════════════════════════════════════
-const ENTRY_DISPLAY = {
-  'BE/U.WICK': 'Entry Type A',
-  'BE/IMB':    'Entry Type B',
-  'BE/T.BAR':  'Entry Type C',
-  'M15 BE':    'Entry Type D',
-  'M3 SIM':    'Entry Type E',
-  'SIM/IMB':   'Entry Type F',
-  'H4 BE':     'Entry Type G',
-};
-function entryLabel(e) { return ENTRY_DISPLAY[e] || e || 'Unknown'; }
-
-// BIAS MODEL DISPLAY MAP
-const BIAS_DISPLAY = {
-  'H4 A+':         'Model A',
-  'H4 A+, R.ENTRY':'Model A — Re-entry',
-  'H4A+ R.ENTRY':  'Model A — Re-entry (variant)',
-  'ARC':           'ARC Model',
-  'ARC R.ENTRY':   'ARC — Re-entry',
-  'R.ENTRY':       'Re-entry',
-  'PB-MTG':        'Pullback Model',
-};
-function biasLabel(b) { return BIAS_DISPLAY[b] || b || 'Unknown'; }
-
-// GRADE DISPLAY MAP — keep A+/CLEAN etc but remove internal suffix details
-const GRADE_DISPLAY = {
-  'A+/CLEAN':    'Qualified — Clean',
-  'A+/EX-ERROR': 'Qualified — Execution Error',
-  'NO SETUP/X':  'Unqualified',
-};
-function gradeLabel(g) { return GRADE_DISPLAY[g] || g || 'Unknown'; }
-
-
