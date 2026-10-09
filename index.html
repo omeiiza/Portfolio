@@ -616,8 +616,8 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
         <tr><td class="mono">Timeframes</td><td>Multiple timeframes used across the framework</td></tr>
         <tr><td class="mono">ARC</td><td>Asia Range Circle — a proprietary intraday reference range</td></tr>
         <tr><td class="mono">ML</td><td>Money Level — proprietary price-area classification</td></tr>
-        <tr><td class="mono">SIM</td><td>Shift in Momentum</td></tr>
-        <tr><td class="mono">BE</td><td>Best Entry (not break-even in entry context)</td></tr>
+        <tr><td class="mono">SIM</td><td>Proprietary momentum-confirmation signal</td></tr>
+        <tr><td class="mono">BE</td><td>Proprietary entry-location designation</td></tr>
       </table></div>
     </div>
     <div class="gc">
@@ -632,9 +632,9 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
     </div>
   </div>
 
-  <div class="sh"><span class="sh-t">Entry Trigger</span></div>
+  <div class="sh"><span class="sh-t">Execution Approach</span></div>
   <div style="background:var(--bg2);border:1px solid var(--line);padding:16px">
-    <div style="font-size:10px;font-family:var(--mono);color:var(--dim);margin-bottom:10px;letter-spacing:.07em">H4 CONTEXT → MODEL → DIRECTION → ARC/LOCATION → M3 SIM → EXECUTION</div>
+    <div style="font-size:10px;font-family:var(--mono);color:var(--dim);margin-bottom:10px;letter-spacing:.07em">MARKET CONTEXT → LOCATION → CONFIRMATION → EXECUTION → RISK → REVIEW</div>
     <div class="body" style="font-size:12px">Neither the directional framework nor ARC automatically triggers entry. Proprietary execution confirmation is required. Structural or price levels alone do not constitute an entry signal.</div>
   </div>
 </main>
@@ -1927,7 +1927,7 @@ document.getElementById('rmodal').addEventListener('keydown',e=>{if(e.key==='Esc
 const CHECKS=[
   {t:'Setup qualifies as A+ under A5RT framework',s:'Setup → Bias → Liquidity → Model → Entry passed'},
   {t:'Bias model is H4 A+, H4 B+, ARC, or defined variant',s:'Not unnamed or first-time structure'},
-  {t:'Entry type is BE/U.WICK, BE/IMB, M15 BE, or M3 SIM',s:'SIM/IMB only if sole qualifying structure'},
+  {t:'Entry confirmation method meets the A5RT qualification standard',s:'Only qualified entry structures permitted'},
   {t:'This is NOT an ARC re-entry after failed first entry',s:'Hard stop — 0/5 historical wins'},
   {t:'SL at structure-based invalidation level',s:'Not compressed to reduce risk'},
   {t:'TP pre-defined based on structure or planned R:R',s:'Exit plan set before entry'},
