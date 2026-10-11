@@ -814,7 +814,7 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
   <div class="sh" style="margin-top:26px"><span class="sh-t">No-Trade State</span></div>
   <div style="border:1px solid var(--line);padding:28px;text-align:center" role="status">
     <div style="font-size:clamp(18px,4vw,30px);font-weight:700;letter-spacing:-.01em;margin-bottom:8px">STAY FLAT</div>
-    <div style="font-size:11px;font-family:var(--mono);color:var(--dim);line-height:1.9">No A+ setup detected.<br>Protect capital.<br>Wait for qualification.</div>
+    <div style="font-size:11px;font-family:var(--mono);color:var(--dim);line-height:1.9">No qualified setup present.<br>Protect capital.<br>Wait for qualification.</div>
   </div>
 </main>
 
@@ -1333,15 +1333,15 @@ const MONTHLY_REPORTS = [
     summary:{totalR:4.44,trades:9,wr:22.2,exp:0.49,maxDD:2.1,avgWin:4.8,avgLoss:-0.9},
     instruments:[{n:"ETH",t:5,wr:40,r:6.2,mkt:"crypto"},{n:"EU",t:4,wr:0,r:-1.8,mkt:"forex"}],
     sessions:[{n:"London",t:6,wr:16.7,r:0.8},{n:"New York",t:3,wr:33,r:3.6}],
-    setups:[{n:"A+/CLEAN",t:7,wr:28.6,r:5.9},{n:"NO SETUP/X",t:2,wr:0,r:-1.5}],
+    setups:[{n:"Qualified",t:7,wr:28.6,r:5.9},{n:"Unqualified",t:2,wr:0,r:-1.5}],
     curve:[-0.9,-1.8,-2.1,-1.2,-0.3,1.5,3.2,3.9,4.44],
-    worked:["ETH continued to produce the majority of positive R.","A+/CLEAN setups maintained positive expectancy.","Risk management held — no daily stop violations."],
+    worked:["ETH continued to produce the majority of positive R.","Qualified setups maintained positive expectancy.","Risk management held — no daily stop violations."],
     failed:["Two NO SETUP/X trades produced −1.5R with zero wins.","London session underperformed relative to New York.","Late entries increased MAE on two trades."],
     lesson:"Eliminating the two no-setup trades would have improved the month by +1.5R with zero additional risk.",
-    keep:["A+/CLEAN qualification standard.","ETH as primary instrument."],
+    keep:["Qualified setup standard.","ETH as primary instrument."],
     stop:["NO SETUP/X trades entirely.","Late entries beyond optimal zone."],
-    test:["ETH-only A+/CLEAN session performance."],
-    target:["10+ A+/CLEAN trades next month.","Zero NO SETUP/X entries."],
+    test:["ETH-only qualified session performance."],
+    target:["10+ qualified trades next month.","Zero NO SETUP/X entries."],
     status:"POSITIVE",sc:"pos",
     note:"Steady month. ETH edge remains the primary driver. No daily stop violations."
   },
@@ -1350,15 +1350,15 @@ const MONTHLY_REPORTS = [
     summary:{totalR:12.84,trades:11,wr:36.4,exp:1.17,maxDD:1.8,avgWin:5.9,avgLoss:-0.8},
     instruments:[{n:"ETH",t:7,wr:57.1,r:14.2,mkt:"crypto"},{n:"EU",t:4,wr:0,r:-1.4,mkt:"forex"}],
     sessions:[{n:"Asia",t:2,wr:100,r:5.8},{n:"London",t:5,wr:20,r:1.6},{n:"New York",t:4,wr:25,r:5.4}],
-    setups:[{n:"A+/CLEAN",t:10,wr:40,r:14.3},{n:"NO SETUP/X",t:1,wr:0,r:-1.5}],
+    setups:[{n:"Qualified",t:10,wr:40,r:14.3},{n:"Unqualified",t:1,wr:0,r:-1.5}],
     curve:[-0.8,1.1,4.2,3.4,5.9,7.8,7.0,9.4,10.2,11.5,12.84],
-    worked:["A+/CLEAN execution rate reached 90.9% — highest observed to date.","Asia session produced two clean winners at +5.8R combined.","ETH: 57% win rate on 7 trades — edge clearly present in current sample.","Max drawdown contained to 1.8R — strongest risk control in recent periods."],
-    failed:["One NO SETUP/X trade — London FOMO entry, −1.5R.","EU A+/CLEAN: 0/4 wins — sample too small to conclude; monitoring.","Two trades closed before planned TP — premature exit pattern continuing."],
+    worked:["Qualified execution rate reached 90.9% — highest observed to date.","Asia session produced two clean winners at +5.8R combined.","ETH: 57% win rate on 7 trades — edge clearly present in current sample.","Max drawdown contained to 1.8R — strongest risk control in recent periods."],
+    failed:["One NO SETUP/X trade — London FOMO entry, −1.5R.","EU qualified setups: 0/4 wins — sample too small to conclude; monitoring.","Two trades closed before planned TP — premature exit pattern continuing."],
     lesson:"A clean month is not about winning more. It is about removing trades that should not have been taken. One NO SETUP/X trade lowered monthly expectancy by an estimated 0.14R.",
-    keep:["A+/CLEAN as the only trade category.","ETH as primary instrument.","Asia session priority."],
+    keep:["Qualified setups as the only trade category.","ETH as primary instrument.","Asia session priority."],
     stop:["FOMO entries in London. Zero exceptions.","Premature exits before structural TP."],
     test:["Increasing Asia session trade count when valid setups form."],
-    target:["12+ A+/CLEAN trades.","Zero NO SETUP/X.","Maintain A+/CLEAN expectancy above +1.0R."],
+    target:["12+ qualified trades.","Zero NO SETUP/X.","Maintain qualified trade expectancy above +1.0R."],
     status:"IMPROVING",sc:"pos",
     note:"Best execution month observed to date. One behavioral error prevented a clean record."
   }
@@ -1626,7 +1626,7 @@ function renderEdge(){
   const cs=calcStats(clean);
   const es=calcStats(graded);
   document.getElementById('edgeInsight').innerHTML=
-    cs?`<strong>Current observation (n=${clean.length} qualified trades):</strong> Observed expectancy of <strong style="color:var(--green)">${fmtR(cs.exp)}</strong> on A+/CLEAN setups. Win rate ${cs.wr}% with avg win ${fmtR(cs.avgWin)} vs avg loss ${fmtR(cs.avgLoss)}. Sample is developing — interpret with appropriate caution.`
+    cs?`<strong>Current observation (n=${clean.length} qualified trades):</strong> Observed expectancy of <strong style="color:var(--green)">${fmtR(cs.exp)}</strong> on qualified setups. Win rate ${cs.wr}% with avg win ${fmtR(cs.avgWin)} vs avg loss ${fmtR(cs.avgLoss)}. Sample is developing — interpret with appropriate caution.`
     :'Insufficient graded data.';
   document.getElementById('gradeSample').textContent=`n=${graded.length}`;
   // Grade KPIs
@@ -1685,7 +1685,7 @@ function renderExecution(){
   const g2=calcStats(TRADES.filter(t=>t.grade==='NO SETUP/X'));
   document.getElementById('errorTable').innerHTML=`<table class="tbl">
     <tr><th>Category</th><th>n</th><th>Wins</th><th>R Cost</th><th>Status</th></tr>
-    ${g1?`<tr><td><span class="tag ty">A+/EX-ERROR</span></td><td>${g1.n}</td><td class="neg">0</td><td class="neg">${fmtR(g1.totalR)}</td><td><span class="tag ty">EXECUTION</span></td></tr>`:''}
+    ${g1?`<tr><td><span class="tag ty">Execution Error</span></td><td>${g1.n}</td><td class="neg">0</td><td class="neg">${fmtR(g1.totalR)}</td><td><span class="tag ty">EXECUTION</span></td></tr>`:''}
     ${g2?`<tr><td><span class="tag tr">NO SETUP/X</span></td><td>${g2.n}</td><td class="neg">0</td><td class="neg">${fmtR(g2.totalR)}</td><td><span class="tag tr">BEHAVIOURAL</span></td></tr>`:''}
   </table>`;
   // Re-entry table
@@ -1700,7 +1700,7 @@ function renderExecution(){
     <tr><td><span class="tag tr">P1 STOP</span></td><td>ARC Re-entry</td><td class="neg">−6.1R</td><td style="color:var(--grey);font-size:11px">No re-entries on ARC after failed first</td></tr>
     <tr><td><span class="tag tr">P1 STOP</span></td><td>Unqualified Trades</td><td class="neg">${g2?fmtR(g2.totalR):'—'}</td><td style="color:var(--grey);font-size:11px">Zero tolerance outside A5RT</td></tr>
     <tr><td><span class="tag ty">P2 REVIEW</span></td><td>SIM/IMB entry</td><td class="neg">−5.4R</td><td style="color:var(--grey);font-size:11px">Strongest confluence only</td></tr>
-    <tr><td><span class="tag tg">P3 BUILD</span></td><td>ETH A+/CLEAN</td><td class="pos">+34.9R</td><td style="color:var(--grey);font-size:11px">Continue ETH focus with A5RT</td></tr>
+    <tr><td><span class="tag tg">P3 BUILD</span></td><td>ETH Qualified Trades</td><td class="pos">+34.9R</td><td style="color:var(--grey);font-size:11px">Continue ETH focus with A5RT</td></tr>
     <tr><td><span class="tag tg">P4 PROTECT</span></td><td>Asia session</td><td class="pos">Best session</td><td style="color:var(--grey);font-size:11px">Protect quality; don't overtrade</td></tr>
   </table>`;
 }
@@ -1770,7 +1770,7 @@ function setRiskMC(r,el){
 function buildMC(){
   const clean=TRADES.filter(t=>t.grade==='A+/CLEAN');
   const cs=calcStats(clean);
-  if(!cs||!clean.length){document.getElementById('mcKpis').innerHTML='<div class="empty" style="grid-column:1/-1">Insufficient A+/CLEAN data for simulation.</div>';return;}
+  if(!cs||!clean.length){document.getElementById('mcKpis').innerHTML='<div class="empty" style="grid-column:1/-1">Insufficient qualified trade data for simulation.</div>';return;}
   const SIMS=5000, N=mcHorizon, RUIN_DD=20;
   const rArr=clean.map(t=>t.r);
   function sim(){
@@ -1823,9 +1823,9 @@ function buildMC(){
   ]},options:{...CD,responsive:true,scales:{x:{display:false},y:{...GR,ticks:{...GR.ticks,callback:v=>`${v>0?'+':''}${v}R`}}}}});
   const n=clean.length;
   document.getElementById('mcMethodology').textContent=
-    `${SIMS.toLocaleString()} simulations · ${N} trades per simulation · Bootstrap resampling with replacement from ${n} observed A+/CLEAN trades · Fixed ${mcRisk}% risk · Ruin defined as drawdown ≥ ${RUIN_DD}R · Results are conditional on the observed sample and do not guarantee future profitability.`;
+    `${SIMS.toLocaleString()} simulations · ${N} trades per simulation · Bootstrap resampling with replacement from ${n} observed qualified trades · Fixed ${mcRisk}% risk · Ruin defined as drawdown ≥ ${RUIN_DD}R · Results are conditional on the observed sample and do not guarantee future profitability.`;
   document.getElementById('labInsight').innerHTML=
-    `<div class="ins-l">SIMULATION BASIS · n=${n} A+/CLEAN TRADES</div><div class="ins-t">Parameters: <strong>WR ${cs.wr}% · Avg Win ${fmtR(cs.avgWin)} · Avg Loss ${fmtR(cs.avgLoss)} · Exp ${fmtR(cs.exp)}</strong>. Bootstrapped from actual qualified trade distribution — not assumed normal. Monte Carlo results are probabilistic estimates, not forecasts.</div>`;
+    `<div class="ins-l">SIMULATION BASIS · n=${n} QUALIFIED TRADES</div><div class="ins-t">Parameters: <strong>WR ${cs.wr}% · Avg Win ${fmtR(cs.avgWin)} · Avg Loss ${fmtR(cs.avgLoss)} · Exp ${fmtR(cs.exp)}</strong>. Bootstrapped from actual qualified trade distribution — not assumed normal. Monte Carlo results are probabilistic estimates, not forecasts.</div>`;
 }
 
 // ═══════════════════ REPORTS ═══════════════════
