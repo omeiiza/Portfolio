@@ -275,6 +275,81 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
 .ft-brand{font-size:13px;font-weight:700;letter-spacing:.04em;margin-bottom:4px}
 .ft-sub{font-size:9.5px;font-family:var(--mono);color:var(--dim);line-height:1.7}
 
+
+/* ═══════ ANIMATED BRAND NAME ═══════ */
+.brand-name {
+  position: relative;
+  display: inline-block;
+  /* Clip the scanner to the text bounds */
+  overflow: visible;
+}
+
+/* The price-line scanner: a vertical cursor that sweeps left→right */
+.brand-name::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(240,240,240,.15) 20%,
+    rgba(240,240,240,.9) 50%,
+    rgba(240,240,240,.15) 80%,
+    transparent 100%
+  );
+  border-radius: 1px;
+  /* Sweep across the name once, then fade out */
+  animation: brand-scan 2.4s cubic-bezier(.4,0,.2,1) 0.6s 1 forwards;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* After sweep, the text holds a subtle left→right gradient shimmer */
+.brand-name {
+  background: linear-gradient(
+    90deg,
+    var(--white) 0%,
+    var(--white) 40%,
+    rgba(240,240,240,.65) 70%,
+    var(--white) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: brand-shimmer 5s ease 3.2s infinite;
+}
+
+@keyframes brand-scan {
+  0%   { left: -4px; opacity: 0; }
+  8%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: calc(100% + 4px); opacity: 0; }
+}
+
+@keyframes brand-shimmer {
+  0%   { background-position: 100% 0; }
+  40%  { background-position: 0% 0; }
+  100% { background-position: 100% 0; }
+}
+
+/* prefers-reduced-motion: static, no animation */
+@media (prefers-reduced-motion: reduce) {
+  .brand-name::after { animation: none; opacity: 0; }
+  .brand-name {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--white);
+    color: var(--white);
+  }
+}
+
+/* Ensure the nav logo doesn't clip the animation */
+.dn-logo { overflow: visible; }
+
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 /* ═══════ MEDIA PAGE ═══════ */
 .media-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:24px}
@@ -368,7 +443,7 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
 <nav id="dnav" role="navigation" aria-label="Main navigation">
   <div class="dn-logo">
     <img id="navImg" alt="Omeiza profile">
-    OMEIZA
+    <span class="brand-name">Ọmẹiza</span>
   </div>
   <div class="dn-links">
     <button class="dnb on" onclick="nav('home',this)">Home</button>
@@ -421,7 +496,7 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
   <!-- HERO -->
   <section style="padding:16px 0 24px;border-bottom:1px solid var(--line);margin-bottom:26px" aria-label="Introduction">
     <div class="eye">TRADER · RESEARCHER · BUILDER</div>
-    <h1 class="h1" style="margin-bottom:10px">OMEIZA</h1>
+    <h1 class="h1" style="margin-bottom:10px"><span class="brand-name">Ọmẹiza</span></h1>
     <p class="body" style="max-width:400px;margin-bottom:18px">Building systematic approaches to discretionary trading through data, risk management and continuous research.</p>
     <div class="phil">
       <span class="phil-s" style="color:var(--white)">RIGHT</span><span class="phil-d">→</span><span class="phil-s">ATTITUDE</span><span class="phil-d">·</span><span class="phil-s">MINDSET</span><span class="phil-d">·</span><span class="phil-s">WORK-PROCESS</span>
@@ -825,7 +900,7 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
   <div class="ab-hero">
     <img id="aboutImg" class="ab-img" alt="Omeiza">
     <div>
-      <div style="font-size:clamp(26px,5vw,44px);font-weight:700;letter-spacing:-.03em;margin-bottom:4px">OMEIZA</div>
+      <div style="font-size:clamp(26px,5vw,44px);font-weight:700;letter-spacing:-.03em;margin-bottom:4px"><span class="brand-name">Ọmẹiza</span></div>
       <div style="font-size:11px;font-family:var(--mono);color:var(--grey);letter-spacing:.1em;margin-bottom:12px">SYSTEMS-ORIENTED POLYMATH</div>
       <div style="font-size:10px;font-family:var(--mono);color:var(--dim);letter-spacing:.1em;margin-bottom:12px">TRADER · RESEARCHER · BUILDER</div>
       <div class="body">Building systematic approaches to discretionary trading through data, process and continuous research. Focused on developing edge across Forex and Crypto markets.</div>
@@ -1182,7 +1257,7 @@ footer{border-top:1px solid var(--line);padding:22px 24px;margin-top:48px}
 <footer role="contentinfo">
   <div class="ft">
     <div>
-      <div class="ft-brand">OMEIZA</div>
+      <div class="ft-brand"><span class="brand-name">Ọmẹiza</span></div>
       <div class="ft-sub">ALGO5THM / A5RT<br>Personal trading portfolio, research and performance archive.<br>Metaverse.</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
         <button onclick="nav('performance',document.querySelector('.dnb:nth-child(2)'))" style="background:none;border:none;color:var(--dim);font-size:9px;font-family:var(--mono);cursor:pointer;letter-spacing:.05em;padding:0">Performance</button>
